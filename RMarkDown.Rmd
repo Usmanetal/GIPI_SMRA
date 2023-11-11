@@ -1,0 +1,97 @@
+---
+title: "Sample of Prevalence of GIPI in HIV Infection"
+author: "Usman"
+date: "2023-11-06"
+output:
+  html_document: 
+    toc: yes
+    number_sections: yes
+  pdf_document: 
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# **Introduction**
+
+Intestinal parasites in HIV and AIDS patients increase the risk of gastroenteritis, adding to the complexity of the virus. According to the literatures, their interactions are one of the factors leading to HIV replication and progression of AIDs in Africa.
+
+# **Title: Spatio-temporal Mapping of Gastrointestinal Parasitic Infection (GIPI) Prevalence in a Nigeria: A Systematic Review and Meta-Analysis in HIV Cohort Studies**
+
+## **Quality Assessment of Included Studies by New-Castle Ottawa Scale** 
+
+Uising new-castle Ottawa (NOS) scale
+
+**Brief**: NOS is a ‘star system’ was been developed in which a study is judged on three broad perspectives:
+
+1.	the selections of the study groups
+2.	the comparability of the groups
+3.	the ascertainment of either the exposure or outcome of interest for case-control or cohort studies respectively.
+
+A study can be awarded a maximum of one point for each numbered item with the Selection and Exposure categories. A maximum of two points can be given for Comparability. 
+
+```{r pressure, echo=TRUE}
+library(readxl)
+ROB <- read_excel("~/Sample Meta_Data on prevalence of GIPI in HIV Disease.xlsx", 
+                  sheet = "ROB")
+ROB
+```
+
+
+
+## **Spatial Polygon**
+
+This is a sample prevalence data where individual study effect size was extracted and then aggregated in regions that has more than one published article. 
+
+```{r}
+library(tidyverse)
+library(readxl)
+GIPI_sample <- read_excel("~/Sample Meta_Data on prevalence of GIPI in HIV Disease.xlsx", 
+                          sheet = "Sheet2")
+head(GIPI_sample)
+
+GIPI_sample[-c(1,5:8),]%>% 
+  select(`First Author...6`,`Publication Year`,
+         Region,`positive parasitic infection (n)`,`Study Population`)%>%
+  rename(Author=`First Author...6`,
+         Year=`Publication Year`,
+         Positive=`positive parasitic infection (n)`,
+        Total=`Study Population`)%>%
+  group_by(Region)%>%
+  summarise(x=sum(Positive,na.rm= TRUE),y=sum(Total,na.rm= TRUE))%>%
+  mutate(y=recode(y,"3211"=285))%>%mutate(z=x/y)
+```
+
+## **Map of prevalence study**
+
+Areal or lattice data number of subregions at which prevalence outcomes are aggregated
+
+```{r}
+B<-vector()
+
+prevalence<- for (i in 1:37) {
+  B[c(12,14,30,34)]<-c(0.05,0,0.9,0.4)
+  
+  B[i]<-B
+  print(B)
+}
+```
+
+
+
+```{r}
+library(raster)
+library(sf)
+library(viridis)
+
+Nig<-getData('GADM', country='Ng', level=1)
+Nig1<-Nig
+Nig1@data$prevalence<-B
+
+map <- st_as_sf(Nig1)
+ggplot(map) + geom_sf(aes(fill = prevalence)) +
+  theme_classic()+scale_fill_viridis(na.value="white")
+```
+
