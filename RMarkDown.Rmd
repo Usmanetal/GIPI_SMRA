@@ -69,14 +69,36 @@ GIPI_sample[-c(1,5:8),]%>%
 Areal or lattice data number of subregions at which prevalence outcomes are aggregated
 
 ```{r}
-B<-vector()
+sear<-vector(length = 37)
 
+  sear[c(12,14,30,34)]<-c(0.05,0,0.9,0.4)
+  sear
+
+ 
+```
+
+```{r}
+B<-vector()
 prevalence<- for (i in 1:37) {
-  B[c(12,14,30,34)]<-c(0.05,0,0.9,0.4)
-  
-  B[i]<-B
-  print(B)
+    B[c(12,14,30,34,37)]<-c(0.05,0,0.9,0.4,NA)
+    i[B]
+  return(B)
 }
+B
+```
+
+
+
+```{r}
+# C<-vector()
+# 
+# prevalence<- for (i in 1:37) {
+# 
+#    C[c(12,14,30,34)]<-c(0.05,0,0.9,0.4)
+#   C[i]<-C
+  
+ 
+
 ```
 
 

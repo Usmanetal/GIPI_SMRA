@@ -437,15 +437,15 @@ was extracted and then aggregated in regions that has more than one
 published article.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.1     ✔ readr     2.1.4
+## ✔ dplyr     1.1.4     ✔ readr     2.1.4
 ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.1     
+## ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors</code></pre>
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 <pre class="r"><code>library(readxl)
 GIPI_sample &lt;- read_excel(&quot;~/Sample Meta_Data on prevalence of GIPI in HIV Disease.xlsx&quot;, 
                           sheet = &quot;Sheet2&quot;)</code></pre>
@@ -500,198 +500,29 @@ GIPI_sample &lt;- read_excel(&quot;~/Sample Meta_Data on prevalence of GIPI in H
 prevalence study</strong></h2>
 <p>Areal or lattice data number of subregions at which prevalence
 outcomes are aggregated</p>
-<pre class="r"><code>B&lt;-vector()
+<pre class="r"><code>sear&lt;-vector(length = 37)
 
+  sear[c(12,14,30,34)]&lt;-c(0.05,0,0.9,0.4)
+  sear</code></pre>
+<pre><code>##  [1] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.05 0.00 0.00 0.00
+## [16] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.90
+## [31] 0.00 0.00 0.00 0.40 0.00 0.00 0.00</code></pre>
+<pre class="r"><code>B&lt;-vector()
 prevalence&lt;- for (i in 1:37) {
-  B[c(12,14,30,34)]&lt;-c(0.05,0,0.9,0.4)
-  
-  B[i]&lt;-B
-  print(B)
-}</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 0.0  NA  NA  NA  NA  NA
-## [20]  NA  NA  NA  NA  NA  NA  NA  NA  NA  NA 0.9  NA  NA  NA 0.4</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA   NA   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA   NA</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40   NA</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
-<pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
-## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
-## [31]   NA   NA   NA 0.40   NA   NA</code></pre>
-<pre><code>## Warning in B[i] &lt;- B: number of items to replace is not a multiple of
-## replacement length</code></pre>
+    B[c(12,14,30,34,37)]&lt;-c(0.05,0,0.9,0.4,NA)
+    i[B]
+  return(B)
+}
+B</code></pre>
 <pre><code>##  [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.05   NA 0.00   NA
 ## [16]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 0.90
 ## [31]   NA   NA   NA 0.40   NA   NA   NA</code></pre>
+<pre class="r"><code># C&lt;-vector()
+# 
+# prevalence&lt;- for (i in 1:37) {
+# 
+#    C[c(12,14,30,34)]&lt;-c(0.05,0,0.9,0.4)
+#   C[i]&lt;-C</code></pre>
 <pre class="r"><code>library(raster)</code></pre>
 <pre><code>## Loading required package: sp</code></pre>
 <pre><code>## 
@@ -706,21 +537,6 @@ prevalence&lt;- for (i in 1:37) {
 <pre class="r"><code>Nig&lt;-getData(&#39;GADM&#39;, country=&#39;Ng&#39;, level=1)</code></pre>
 <pre><code>## Warning in getData(&quot;GADM&quot;, country = &quot;Ng&quot;, level = 1): getData will be removed in a future version of raster
 ## . Please use the geodata package instead</code></pre>
-<pre><code>## Please note that rgdal will be retired during October 2023,
-## plan transition to sf/stars/terra functions using GDAL and PROJ
-## at your earliest convenience.
-## See https://r-spatial.org/r/2023/05/15/evolution4.html and https://github.com/r-spatial/evolution
-## rgdal: version: 1.6-7, (SVN revision 1203)
-## Geospatial Data Abstraction Library extensions to R successfully loaded
-## Loaded GDAL runtime: GDAL 3.5.2, released 2022/09/02
-## Path to GDAL shared files: C:/Users/Usman Ola/AppData/Local/R/win-library/4.2/rgdal/gdal
-## GDAL binary built with GEOS: TRUE 
-## Loaded PROJ runtime: Rel. 8.2.1, January 1st, 2022, [PJ_VERSION: 821]
-## Path to PROJ shared files: C:/Users/Usman Ola/AppData/Local/R/win-library/4.2/rgdal/proj
-## PROJ CDN enabled: FALSE
-## Linking to sp version:2.0-0
-## To mute warnings of possible GDAL/OSR exportToProj4() degradation,
-## use options(&quot;rgdal_show_exportToProj4_warnings&quot;=&quot;none&quot;) before loading sp or rgdal.</code></pre>
 <pre class="r"><code>Nig1&lt;-Nig
 Nig1@data$prevalence&lt;-B
 
