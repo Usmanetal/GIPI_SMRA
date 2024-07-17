@@ -23,3 +23,12 @@ ggplot() +
   labs(title = "Vegetation Map of Nigeria",
        fill = "Vegetation Type") +
   theme_minimal()
+
+pal <- colorBin("viridis", bins = c(0, 0.25, 0.5, 0.75, 1))
+
+# Mapping R file using leaflet package
+leaflet(nigeria) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addCircles(lng = ~wdpaid, lat = ~wdpa_pid, color = ~pal(vegetation$desig_eng)) %>%
+  addLegend("bottomright", pal = pal, values = ~desig_eng,
+            title = "Proportion stunted") %>%
+  addScaleBar(position = c("bottomleft"))

@@ -3,9 +3,9 @@ title: "AI_Gen_Nigeria_vegetation"
 author: "Usman"
 date: "2024-07-08"
 output:
-  word_document: default
-  html_document: default
   pdf_document: default
+  html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -32,6 +32,7 @@ nigeria <- ne_countries(scale = "medium", country = "Nigeria", returnclass = "sf
 # Assuming you have a shapefile for vegetation data in Nigeria
 # For example, let's say it's named "nigeria_vegetation.shp"
 # Load the vegetation shapefile (provide the correct path to your shapefile)
+# kindly download the shapefile using this link: https://opendata.sambusgeospatial.com/datasets/sambusgeospatial::nigeria-protected-areas/explore
 vegetation <- st_read("Nigeria_Protected_Areas.shp")
 
 # Plot the map
