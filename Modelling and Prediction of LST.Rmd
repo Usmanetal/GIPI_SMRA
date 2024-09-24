@@ -1,0 +1,141 @@
+---
+title: "Modeling and Estimating the LST using ML"
+author: "Usman"
+date: "2024-09-22"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+
+library(sf)
+library(terra)
+library(ggplot2)
+library(rgdal)
+library(ggpubr)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(tidyverse)
+nigeria <- ne_countries(scale = "medium", 
+                        country = "Nigeria", returnclass = "sf")
+#plot(nigeria)
+```
+
+## R Markdown
+
+
+```{r cars}
+LST_24 <- rast("2024LST.tif")
+LST_03 <- rast("2003LST.tif")
+LST_84 <- rast("1984LST.tif")
+
+# Converting raster data to a dataframe 
+# lines of code.
+rasterdf <- function(x, aggregate = 1) {
+  resampleFactor <- aggregate
+  inputRaster <- x
+  inCols <- ncol(inputRaster)
+  inRows <- nrow(inputRaster)
+  # Compute numbers of columns and rows in the resampled raster
+  resampledRaster <- rast(ncol=(inCols / resampleFactor),
+                          nrow=(inRows / resampleFactor),
+                          crs = crs(inputRaster))
+  # Match to the extent of the original raster
+  ext(resampledRaster) <- ext(inputRaster)
+  # Resample data on the new raster
+  y <- resample(inputRaster,resampledRaster,method='near')
+  # Extract cell coordinates into a dataframe
+  coords <- xyFromCell(y, seq_len(ncell(y)))
+  # Extract layer names
+  dat <- stack(values(y, dataframe = TRUE))
+  # Add names-'value' for data,'variable' for different
+  # layer names in a multilayerraster
+  names(dat) <- c('value', 'variable')
+  dat <- cbind(coords, dat)
+  dat
+}
+
+# The following code converts the LST raster to a dataframe after
+# aggregating the cell values by a factor of three.
+
+lst_df_24 <- rasterdf(LST_24, aggregate = 3)
+summary(lst_df_24)
+head(lst_df_24)
+
+# lst_1 <- ifel(lst_df_24 == 0, NA, lst)
+# lst_1_c <- lst_1 * 0.02 - 273.15
+
+A <- ggplot(data = lst_df_24) +
+  geom_raster(aes(x = x,
+                  y = y,
+                  fill = value)) +
+  scale_fill_gradient(name = "Degrees C",
+                      low = "blue",
+                      high = "red") +
+  coord_sf(expand = FALSE) +
+  labs(title = "LST-2024",
+       x = "longitude",
+       y = "latitude") +
+  theme(legend.position = "bottom")
+
+lst_df_84 <- rasterdf(LST_84, aggregate = 3)
+summary(lst_df_84)
+lst_df_84%>%filter(value!="NA")%>%head()
+
+
+B <- ggplot(data = lst_df_84) +
+  geom_raster(aes(x = x,
+                  y = y,
+                  fill = value)) +
+  scale_fill_gradient(name = "Degrees C",
+                      low = "blue",
+                      high = "red") +
+  coord_sf(expand = FALSE) +
+  labs(title = "LST-1984",
+       x = "longitude",
+       y = "latitude") +
+  theme(legend.position = "bottom")
+
+lst_df_03 <- rasterdf(LST_03, aggregate = 3)
+summary(lst_df_03)
+lst_df_84%>%filter(value!="NA")%>%head()
+
+
+C <- ggplot(data = lst_df_03) +
+  geom_raster(aes(x = x,
+                  y = y,
+                  fill = value)) +
+  scale_fill_gradient(name = "Degrees C",
+                      low = "blue",
+                      high = "red") +
+  coord_sf(expand = FALSE) +
+  labs(title = "LST 2003",
+       x = "longitude",
+       y = "latitude") +
+  theme(legend.position = "bottom")
+
+ggarrange(A,B,C,nrow = 1,labels = c(
+  "2024","1984","2003"
+))
+
+```
+## Preliminary Analysis: Modelling phase
+
+```{r}
+LULC_24 <- rast("2024_LULC.tif")
+NDVI_24 <- rast("2024_NDVI.tif")
+NDBI_24 <- rast("2024_NDBI.tif")
+
+
+lst_df_24_NAomit<- lst_df_24%>%filter(value!="NA")
+lst_lon_lat<- lst_df_24%>%filter(value!="NA")%>%select(x,y)
+lulc_24_merg<-terra::extract(LULC_24,lst_lon_lat)%>%select(Value_1)
+NDVI_24_merg<-terra::extract(NDVI_24,lst_lon_lat)%>%select(Band_1)
+NDBI_24_merg<- terra::extract(NDBI_24,lst_lon_lat)%>%select("2024_NDBI")
+current_lst_24<- cbind(lst_df_24_NAomit,lulc_24_merg,NDVI_24_merg,NDBI_24_merg)
+names(current_lst_24)<- c("lon","lat","LST","variable","LULC","NDVI","NDBI")
+
+```
+
