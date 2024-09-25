@@ -3,17 +3,18 @@ title: "Sample of Prevalence of GIPI in HIV Infection"
 author: "Usman"
 date: "2023-11-06"
 output:
+  pdf_document: 
+    toc: yes
   html_document: 
     toc: yes
     number_sections: yes
-  pdf_document: 
-    toc: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+\newcommand{\ci}{\perp\!\!\!\perp}
 # **Introduction**
 
 Intestinal parasites in HIV and AIDS patients increase the risk of gastroenteritis, adding to the complexity of the virus. According to the literatures, their interactions are one of the factors leading to HIV replication and progression of AIDs in Africa.
@@ -104,6 +105,7 @@ B
 
 
 ```{r}
+library(GGally)
 library(raster)
 library(sf)
 library(viridis)
@@ -116,4 +118,10 @@ map <- st_as_sf(Nig1)
 ggplot(map) + geom_sf(aes(fill = prevalence)) +
   theme_classic()+scale_fill_viridis(na.value="white")
 ```
+
+
+
+\newcommand{\ci}{\perp\!\!\!\perp}
+
+
 
