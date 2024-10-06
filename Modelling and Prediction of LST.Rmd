@@ -9,7 +9,10 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-
+library(Hmisc)
+library(tensorflow)
+library(neuralnet)
+library(caret)
 library(sf)
 library(terra)
 library(ggplot2)
@@ -18,6 +21,7 @@ library(ggpubr)
 library(rnaturalearth)
 library(rnaturalearthdata)
 library(tidyverse)
+library(markovchain)
 nigeria <- ne_countries(scale = "medium", 
                         country = "Nigeria", returnclass = "sf")
 #plot(nigeria)
@@ -26,7 +30,11 @@ nigeria <- ne_countries(scale = "medium",
 ## R Markdown
 
 
-```{r cars}
+```{r}
+myCol = terrain.colors(3)
+
+ndvi_naive<- rast("NDVI.tif")
+ndvi_naive<- rast("NDVI_2003.tif")
 LST_24 <- rast("2024LST.tif")
 LST_03 <- rast("2003LST.tif")
 LST_84 <- rast("1984LST.tif")
@@ -120,6 +128,24 @@ ggarrange(A,B,C,nrow = 1,labels = c(
   "2024","1984","2003"
 ))
 
+# Matrix table for Markov Chain
+# source("TransProb.R")
+# source("MatDataBase.R")
+# source("GatherTransMat.R")
+
+# mat_84324<- GatherTransMat("LST1984"=lst_df_84$value,"LST2003"=lst_df_03$value,"LST2024"=lst_df_24$value)
+# DriveZone<- c("LST1984","LST2003","LST2024")
+# Mat_state<- as.matrix(mat_84324)%>%na.omit()
+# MCZone<- new("markovchain",transitionMatrix=mat_84324,state=c("SDR","AE","CW"))
+# 
+# 
+# lst_df_84_new<- lst_df_84%>%mutate(LST= "LST1984")%>%select("value",LST)
+# lst_df_03_new<- lst_df_03%>%mutate(LST= "LST2003")%>%select("value",LST)
+# lst_df_24_new<- lst_df_24%>%mutate(LST= "LST2024")%>%select("value",LST)
+# 
+# lst_matrix<- rbind(lst_df_84_new,lst_df_03_new,lst_df_24_new)%>%na.omit()
+# Dzone<- c("LST84","LST03","LST24")
+
 ```
 ## Preliminary Analysis: Modelling phase
 
@@ -127,15 +153,99 @@ ggarrange(A,B,C,nrow = 1,labels = c(
 LULC_24 <- rast("2024_LULC.tif")
 NDVI_24 <- rast("2024_NDVI.tif")
 NDBI_24 <- rast("2024_NDBI.tif")
+LULC_2044 <- rast("2084_LULC.tif")
+LULC_2064 <- rast("2084_LULC.tif")
+LULC_2084 <- rast("2084_LULC.tif")
 
-
+library(dplyr)
 lst_df_24_NAomit<- lst_df_24%>%filter(value!="NA")
-lst_lon_lat<- lst_df_24%>%filter(value!="NA")%>%select(x,y)
-lulc_24_merg<-terra::extract(LULC_24,lst_lon_lat)%>%select(Value_1)
-NDVI_24_merg<-terra::extract(NDVI_24,lst_lon_lat)%>%select(Band_1)
-NDBI_24_merg<- terra::extract(NDBI_24,lst_lon_lat)%>%select("2024_NDBI")
+lst_lon_lat<- lst_df_24%>%filter(value!="NA")%>%dplyr::select(x,y)
+lulc_24_merg<-terra::extract(LULC_24,lst_lon_lat)%>%dplyr::select(Value_1)
+NDVI_24_merg<-terra::extract(NDVI_24,lst_lon_lat)%>%dplyr::select(Band_1)
+NDBI_24_merg<- terra::extract(NDBI_24,lst_lon_lat)%>%dplyr::select("2024_NDBI")
 current_lst_24<- cbind(lst_df_24_NAomit,lulc_24_merg,NDVI_24_merg,NDBI_24_merg)
-names(current_lst_24)<- c("lon","lat","LST","variable","LULC","NDVI","NDBI")
+# names(current_lst_24)<- c("lon","lat","LST","variable","LULC","NDVI","NDBI")
+
+current_lst_24_naomit<- current_lst_24%>% na.omit(Value_1)
+current_lst_24_naomit$Value_1<-as.numeric(current_lst_24_naomit$Value_1)
+
+
+current_lst_24_logistM_1<- lm(value~Value_1+Band_1+current_lst_24_naomit$"2024_NDBI",data=current_lst_24_naomit)
+current_lst_24_logistM_2<- lm(value~Band_1,data=current_lst_24_naomit)
+current_lst_24_logistM_3<- lm(value~current_lst_24_naomit$Value_1,data=current_lst_24_naomit)
+summary(current_lst_24_logistM_1)
+summary(current_lst_24_logistM_2)
+summary(current_lst_24_logistM_3)
+
+# sss1<- predict(LULC_24,current_lst_24_logistM,type="response")
+# 
+# lulc_64_merg<-terra::extract(LULC_2044,lst_lon_lat)
+# lulc_084_merg<-terra::extract(LULC_2064,lst_lon_lat)
+# lulc_44_merg<-terra::extract(LULC_2084,lst_lon_lat)
+# Pred_2044_using24<- predict(current_lst_24_logistM,lulc_44_merg,type="response")
+# Pred_2064_using24<- predict(current_lst_24_logistM,lulc_64_merg,type="response")
+# Pred_2084_using24<- predict(current_lst_24_logistM,lulc_084_merg,type="response")
+# plot(sss1)
+# plot(LST_24)
+# head(current_lst_24_naomit)
+
+tm_A<- tmap::tm_shape(LST_84)+
+tmap::tm_raster(title="LST2044",
+breaks = c(22,26,30,34,38,42,45),
+# labels = C(22-26,26-30,30-34,34-38,38-42,42-45),
+palette = c("lightblue","navyblue","green","yellow","orange","red"),
+legend.hist = T) +
+tmap::tm_layout(legend.outside = TRUE)+
+tmap::tm_scale_bar(position=c("right", "bottom"))
+
+tm_A
+
+tm_B<- tmap::tm_shape(LST_03)+
+tmap::tm_raster(title="LST2064",
+style = "fixed",
+breaks = c(22,26,30,36,40,47),
+# labels = C(22-26,26-30,30-34,34-38,38-42,42-45),
+palette = c("lightblue","navyblue","yellow","orange","red"),
+legend.hist = T) +
+tmap::tm_layout(legend.outside = TRUE)+
+tmap::tm_scale_bar(position=c("right", "bottom"))
+
+tm_B
+
+tm_C<- tmap::tm_shape(LST_24)+
+tmap::tm_raster(title="LST2084",
+style = "fixed",
+breaks = c(25,30,35,40,45),
+# labels = C(22-26,26-30,30-34,34-38),
+palette = c("lightblue","yellow","orange","red"),
+legend.hist = T) +
+tmap::tm_layout(legend.outside = TRUE)+
+tmap::tm_scale_bar(position=c("right", "bottom"))
+
+tm_C
+```
+
+```{r}
+# install.packages(c('neuralnet','keras','tensorflow'),dependencies = T)
+
+cr<-rcorr(as.matrix(current_lst_24_naomit[,5:7]))
+cr$r
+# model = neuralnet(
+#     value~Band_1+current_lst_24_naomit$"2024_NDBI",data=current_lst_24_naomit,
+#     hidden=c(4,2),
+#     linear.output = FALSE
+# )
+# 
+# sss<- predict(NDVI_24,model,type="response")
+# plot(sss)
+
+```
+```{r}
+# library(tiff)
+# library(leaflet)
+# library(tmap)
+# library(tmaptools)
+
 
 ```
 
